@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "n6jn3IPKU/0=",
+  "success": true,
+  "projectFilePath": "/Users/gilangtrisetya/Hobby/kubernetes-demo/kubernetes-demo-si-sharp-1/kubernetes-demo-si-sharp-1.csproj",
+  "expectedPackageFiles": [
+    "/Users/gilangtrisetya/.nuget/packages/microsoft.aspnetcore.openapi/9.0.1/microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
+    "/Users/gilangtrisetya/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

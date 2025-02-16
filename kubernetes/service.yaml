@@ -1,0 +1,71 @@
+si-sharp-1Version: apps/v1
+kind: Deployment
+metadata:
+  name: si-sharp-1
+  namespace: argo-demo
+  labels:
+    app.kubernetes.io/name: si-sharp-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: si-sharp-1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: si-sharp-1
+    spec:
+      containers:
+      - name: si-sharp-1
+        imagePullPolicy: Never   # Use local image
+        image: si-sharp-1-image:latest  # Ensure image is available locally
+        ports:
+          - name: http
+            containerPort: 4021
+---
+si-sharp-1Version: v1
+kind: Service
+metadata:
+  name: si-sharp-1
+  namespace: argo-demo
+spec:
+  type: LoadBalancer  # Exposes si-sharp-1 externally
+  selector:
+    app.kubernetes.io/name: si-sharp-1
+  ports:
+    - protocol: TCP
+      port: 4021
+      targetPort: http
+---
+# si-sharp-1Version: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: my-app-ingress
+#   namespace: argo-demo
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: myapp.localhost
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: nginx
+#             port:
+#               number: 80
+#       - path: /si-sharp-1
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: si-sharp-1
+#             port:
+#               number: 4021
+# ---
+si-sharp-1Version: v1
+kind: Namespace
+metadata:
+  name: argo-demo

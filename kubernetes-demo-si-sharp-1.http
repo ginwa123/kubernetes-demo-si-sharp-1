@@ -1,0 +1,6 @@
+@kubernetes_demo_si_sharp_1_HostAddress = http://localhost:5213
+
+GET {{kubernetes_demo_si_sharp_1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
