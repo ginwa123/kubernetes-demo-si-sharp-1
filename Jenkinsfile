@@ -3,55 +3,34 @@ pipeline {
 
     environment {
         DOTNET_ROOT = "/opt/homebrew/bin"
-        PATH = "/opt/homebrew/bin:$PATH"
+        PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        SHELL = "/bin/bash"   // Explicitly set shell
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/ginwa123/kubernetes-demo-si-sharp-1.git'
-            }
-        }
         stage('Restore NuGet Packages') {
             steps {
-                sh '''
-                export PATH="/opt/homebrew/bin:$PATH"
-                dotnet restore
-                '''
+                sh '/bin/bash -c "dotnet restore"'
             }
         }
         stage('Build') {
             steps {
-                sh '''
-                export PATH="/opt/homebrew/bin:$PATH"
-                dotnet build -c Release
-                '''
+                sh '/bin/bash -c "dotnet build -c Release"'
             }
         }
         stage('Run Unit Tests') {
             steps {
-                sh '''
-                export PATH="/opt/homebrew/bin:$PATH"
-                dotnet test
-                '''
+                sh '/bin/bash -c "dotnet test"'
             }
         }
         stage('Build Docker Image') {
             steps {
-                sh '''
-                export PATH="/opt/homebrew/bin:$PATH"
-                docker build -t si-sharp-1-image:latest -f Dockerfile .
-                '''
+                sh '/bin/bash -c "docker build -t si-sharp-1-image:latest -f Dockerfile ."'
             }
         }
         stage('Deploy to Kubernetes') {
             steps {
-                sh '''
-                export PATH="/opt/homebrew/bin:$PATH"
-                kubectl apply -f kubernetes/service.yaml
-                kubectl rollout status deployment/si-sharp-1
-                '''
+                sh '/bin/bash -c "kubectl apply -f kubernetes/service.yaml && kubectl rollout status deployment/si-sharp-1"'
             }
         }
     }
