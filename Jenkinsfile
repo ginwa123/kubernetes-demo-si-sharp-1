@@ -5,6 +5,7 @@ pipeline {
         DOTNET_ROOT = "/opt/homebrew/bin"
         PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
         SHELL = "/bin/bash"   // Explicitly set shell
+        NAMESPACE = "argo-demo"  // Define your Kubernetes namespace
     }
 
     stages {
@@ -30,27 +31,22 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
-                // Apply the Kubernetes service definition
-                sh '/bin/bash -c "kubectl apply -f kubernetes/service.yaml"'
+                // Apply the service
+                sh '/bin/bash -c "kubectl apply -f kubernetes/service.yaml -n $NAMESPACE"'
 
-                // Retry logic for checking rollout status
+                // Wait for deployment to become available with retry
                 script {
-                    def maxRetries = 10  // Max retries
-                    def retries = 0
-                    def success = false
-                    while (retries < maxRetries && !success) {
-                        retries++
-                        try {
-                            // Check if deployment is successful
-                            sh '/bin/bash -c "kubectl rollout status deployment/si-sharp-1 --timeout=5m"'
-                            success = true
-                        } catch (Exception e) {
-                            echo "Attempt ${retries} failed. Deployment not yet available. Retrying..."
-                            sleep(time: 30, unit: 'SECONDS')  // Retry after a delay
-                        }
+                    def retryCount = 5
+                    def deploymentAvailable = false
+
+                    // Retry mechanism to check deployment status
+                    retry(retryCount) {
+                        sh '/bin/bash -c "kubectl rollout status deployment/si-sharp-1 -n $NAMESPACE --timeout=5m"'
+                        deploymentAvailable = true
                     }
-                    if (!success) {
-                        error "Deployment rollout failed after ${maxRetries} retries."
+
+                    if (!deploymentAvailable) {
+                        error "Deployment was not ready after $retryCount attempts."
                     }
                 }
             }
