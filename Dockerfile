@@ -18,8 +18,11 @@ RUN dotnet restore "kubernetes-demo-si-sharp-1.csproj"
 COPY . .
 RUN dotnet publish "kubernetes-demo-si-sharp-1.csproj" -c Release -o /app/publish
 
+# Verify the published files are there
+RUN ls /app/publish  # You can remove this after verifying
+
 # Final runtime image
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "app.dll"]
+ENTRYPOINT ["dotnet", "kubernetes-demo-si-sharp-1.dll"]  # Match the actual DLL name
