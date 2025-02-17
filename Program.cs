@@ -30,7 +30,7 @@ app.MapGet("/weatherforecast", () =>
         ))
         .ToArray();
 
-    console.WriteLine("Weather forecast retrieved");
+    Console.WriteLine("Weather forecast retrieved");
     return forecast;
 })
 .WithName("GetWeatherForecast");
