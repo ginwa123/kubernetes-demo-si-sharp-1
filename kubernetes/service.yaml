@@ -1,4 +1,4 @@
-si-sharp-1Version: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: si-sharp-1
@@ -23,7 +23,7 @@ spec:
           - name: http
             containerPort: 4021
 ---
-si-sharp-1Version: v1
+apiVersion: v1
 kind: Service
 metadata:
   name: si-sharp-1
@@ -37,7 +37,7 @@ spec:
       port: 4021
       targetPort: http
 ---
-# si-sharp-1Version: networking.k8s.io/v1
+# si-sharp-1Version: networking.k8s.io/v1  # If you want to enable Ingress, uncomment and correct the apiVersion here
 # kind: Ingress
 # metadata:
 #   name: my-app-ingress
@@ -65,7 +65,7 @@ spec:
 #             port:
 #               number: 4021
 # ---
-si-sharp-1Version: v1
+apiVersion: v1
 kind: Namespace
 metadata:
   name: argo-demo
