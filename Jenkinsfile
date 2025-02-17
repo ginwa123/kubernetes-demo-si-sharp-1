@@ -28,17 +28,20 @@ pipeline {
             steps {
 
                 // Remove any old images (not 'latest')
-               script {
+                script {
                     // Get all image IDs for si-sharp-1-image except the latest
                     def oldImages = sh(script: '/bin/bash -c "docker images -q si-sharp-1-image | grep -v $(docker images -q si-sharp-1-image:latest)"', returnStdout: true).trim()
 
                     // If old images exist, remove them
                     if (oldImages) {
                         sh "/bin/bash -c 'docker rmi ${oldImages} || true'"
+                    } else {
+                        echo "No old images to remove"
                     }
-
-                    sh '/bin/bash -c "docker build --no-cache -t si-sharp-1-image:latest -f Dockerfile ."'
                 }
+
+                // Build the new image
+                sh '/bin/bash -c "docker build --no-cache -t si-sharp-1-image:latest -f Dockerfile ."'
 
 
             }
