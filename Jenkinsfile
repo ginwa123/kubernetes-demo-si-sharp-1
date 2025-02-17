@@ -1,43 +1,57 @@
 pipeline {
     agent any
 
+    environment {
+        DOTNET_ROOT = "/opt/homebrew/bin"
+        PATH = "/opt/homebrew/bin:$PATH"
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
-                 git branch: 'main',
+                git branch: 'main',
                     url: 'https://github.com/ginwa123/kubernetes-demo-si-sharp-1.git'
             }
         }
         stage('Restore NuGet Packages') {
             steps {
-              sh 'PATH+EXTRA=/opt/homebrew/bin dotnet restore'
+                sh '''
+                export PATH="/opt/homebrew/bin:$PATH"
+                dotnet restore
+                '''
             }
         }
         stage('Build') {
             steps {
-                 sh 'PATH+EXTRA=/opt/homebrew/bin dotnet build -c Release'
+                sh '''
+                export PATH="/opt/homebrew/bin:$PATH"
+                dotnet build -c Release
+                '''
             }
         }
         stage('Run Unit Tests') {
             steps {
-                sh 'PATH+EXTRA=/opt/homebrew/bin dotnet test'
+                sh '''
+                export PATH="/opt/homebrew/bin:$PATH"
+                dotnet test
+                '''
             }
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t si-sharp-1-image:latest -f Dockerfile .'
+                sh '''
+                export PATH="/opt/homebrew/bin:$PATH"
+                docker build -t si-sharp-1-image:latest -f Dockerfile .
+                '''
             }
         }
-        // stage('Push Docker Image') {
-        //     steps {
-        //         sh 'docker tag myapp:latest yourdockerhubusername/myapp:latest'
-        //         sh 'docker push yourdockerhubusername/myapp:latest'
-        //     }
-        // }
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f kubernetes/service.yaml'
-                sh 'kubectl rollout status deployment/si-sharp-1'
+                sh '''
+                export PATH="/opt/homebrew/bin:$PATH"
+                kubectl apply -f kubernetes/service.yaml
+                kubectl rollout status deployment/si-sharp-1
+                '''
             }
         }
     }
