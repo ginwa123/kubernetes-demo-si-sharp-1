@@ -41,7 +41,7 @@ pipeline {
                     // Retry mechanism to check deployment status
                     retry(retryCount) {
                         sh '/bin/bash -c "kubectl rollout status deployment/si-sharp-1 -n $NAMESPACE --timeout=5m"'
-                        sh '/bin/bash -c "kubectl -n argocd patch application si-sharp-1 --type merge -p \'{\"status\": {\"sync\": {\"status\": \"Syncing\"}}}\'"'
+                        // sh '/bin/bash -c "kubectl -n argocd patch application si-sharp-1 --type merge -p \'{\"status\": {\"sync\": {\"status\": \"Syncing\"}}}\'"'
                         deploymentAvailable = true
                     }
 
