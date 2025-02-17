@@ -45,47 +45,47 @@ spec:
         image: si-sharp-1-image:latest  # Ensure image is available locally
         ports:
           - name: http
-            containerPort: 4021
+            containerPort: 8080
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: si-sharp-1
-  namespace: argo-demo
-spec:
-  type: LoadBalancer  # Exposes si-sharp-1 externally
-  selector:
-    app.kubernetes.io/name: si-sharp-1
-  ports:
-    - protocol: TCP
-      port: 4021
-      targetPort: http
----
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: si-sharp-1
+#   namespace: argo-demo
+# spec:
+#   type: LoadBalancer  # Exposes si-sharp-1 externally
+#   selector:
+#     app.kubernetes.io/name: si-sharp-1
+#   ports:
+#     - protocol: TCP
+#       port: 4021
+#       targetPort: http
+# ---
 # Uncomment and correct the apiVersion here if using Ingress
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: my-app-ingress
-  namespace: argo-demo
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: myapp.localhost
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nginx
-            port:
-              number: 80
-      - path: /si-sharp-1
-        pathType: Prefix
-        backend:
-          service:
-            name: si-sharp-1
-            port:
-              number: 4021
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: my-app-ingress
+#   namespace: argo-demo
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: myapp.localhost
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: nginx
+#             port:
+#               number: 80
+#       - path: /si-sharp-1
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: si-sharp-1
+#             port:
+#               number: 4021
