@@ -10,17 +10,17 @@ pipeline {
         }
         stage('Restore NuGet Packages') {
             steps {
-                sh 'dotnet restore'
+               sh '/opt/homebrew/bin/dotnet restore'
             }
         }
         stage('Build') {
             steps {
-                sh 'dotnet build -c Release'
+                sh '/opt/homebrew/bin/dotnet build -c Release'
             }
         }
         stage('Run Unit Tests') {
             steps {
-                sh 'dotnet test'
+                sh '/opt/homebrew/bin/dotnet test'
             }
         }
         stage('Build Docker Image') {
