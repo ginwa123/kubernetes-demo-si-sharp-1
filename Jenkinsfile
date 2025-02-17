@@ -26,9 +26,19 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh '/bin/bash -c "docker build --no-cache -t si-sharp-1-image:latest -f Dockerfile ."'
+
                 // Remove any old images (not 'latest')
-                 sh '/bin/bash -c "docker rmi $(docker images -q si-sharp-1-image | grep -v $(docker images -q si-sharp-1-image:latest)) || true"'
+               script {
+            // Get all image IDs for si-sharp-1-image except the latest
+                    def oldImages = sh(script: '/bin/bash -c "docker images -q si-sharp-1-image | grep -v $(docker images -q si-sharp-1-image:latest)"', returnStdout: true).trim()
+
+                    // If old images exist, remove them
+                    if (oldImages) {
+                        sh "/bin/bash -c 'docker rmi ${oldImages} || true'"
+                    }
+                }
+
+                sh '/bin/bash -c "docker build --no-cache -t si-sharp-1-image:latest -f Dockerfile ."'
             }
         }
         stage('Deploy to Kubernetes') {
