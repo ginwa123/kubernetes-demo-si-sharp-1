@@ -26,24 +26,8 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-
-                // Remove any old images (not 'latest')
-                script {
-                    // Get all image IDs for si-sharp-1-image except the latest
-                    def oldImages = sh(script: '/bin/bash -c "docker images -q si-sharp-1-image | grep -v $(docker images -q si-sharp-1-image:latest)"', returnStdout: true).trim()
-
-                    // If old images exist, remove them
-                    if (oldImages) {
-                        sh "/bin/bash -c 'docker rmi ${oldImages} || true'"
-                    } else {
-                        echo "No old images to remove"
-                    }
-                }
-
                 // Build the new image
-                sh '/bin/bash -c "docker build --no-cache -t si-sharp-1-image:latest -f Dockerfile ."'
-
-
+                sh '/bin/bash -c "docker build -t si-sharp-1-image:latest -f Dockerfile ."'
             }
         }
         stage('Deploy to Kubernetes') {
@@ -59,6 +43,7 @@ pipeline {
                     retry(retryCount) {
                         sh '/bin/bash -c "kubectl rollout status deployment/si-sharp-1 -n $NAMESPACE --timeout=5m"'
                         // sh '/bin/bash -c "kubectl -n argocd patch application si-sharp-1 --type merge -p \'{\"status\": {\"sync\": {\"status\": \"Syncing\"}}}\'"'
+                        sh '/bin/bash -c "kubectl delete pods -l app.kubernetes.io/name=si-sharp-1 -n $NAMESPACE"'
                         deploymentAvailable = true
                     }
 

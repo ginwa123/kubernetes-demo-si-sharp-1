@@ -36,7 +36,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast");
 
 
-app.MapGet("/weatherforecast2", () =>
+app.MapGet("/weatherforecast3", () =>
 {
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
@@ -47,7 +47,7 @@ app.MapGet("/weatherforecast2", () =>
         ))
         .ToArray();
 
-    Console.WriteLine("Weather forecast retrieved");
+    Console.WriteLine("Weather forecast retrieved 3");
     return forecast;
 })
 .WithName("GetWeatherForecast2");
