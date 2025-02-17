@@ -33,7 +33,6 @@ pipeline {
             steps {
                 // Apply the service
                 sh '/bin/bash -c "kubectl apply -f kubernetes/service.yaml -n $NAMESPACE"'
-                sh '/bin/bash -c "kubectl -n argocd patch application si-sharp-1 --type merge -p \'{\"status\": {\"sync\": {\"status\": \"Syncing\"}}}\'"'
                 // Wait for deployment to become available with retry
                 script {
                     def retryCount = 5
@@ -49,6 +48,7 @@ pipeline {
                         error "Deployment was not ready after $retryCount attempts."
                     }
                 }
+                sh '/bin/bash -c "kubectl -n argocd patch application si-sharp-1 --type merge -p \'{\"status\": {\"sync\": {\"status\": \"Syncing\"}}}\'"'
             }
         }
     }
