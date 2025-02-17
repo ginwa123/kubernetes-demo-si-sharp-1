@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/kubernetes-demo-si-sharp-1.props" />
+</Project>

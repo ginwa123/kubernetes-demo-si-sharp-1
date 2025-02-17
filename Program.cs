@@ -35,6 +35,22 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+
+app.MapGet("/weatherforecast2", () =>
+{
+    var forecast = Enumerable.Range(1, 5).Select(index =>
+        new WeatherForecast
+        (
+            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+            Random.Shared.Next(-20, 55),
+            summaries[Random.Shared.Next(summaries.Length)]
+        ))
+        .ToArray();
+
+    Console.WriteLine("Weather forecast retrieved");
+    return forecast;
+})
+.WithName("GetWeatherForecast2");
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

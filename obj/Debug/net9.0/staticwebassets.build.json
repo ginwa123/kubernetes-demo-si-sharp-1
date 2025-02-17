@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "4IggeNXLh3UC6cr0cYZbxUWGGlZHtJVNeWw1X4IDLKw=",
+  "Source": "kubernetes-demo-si-sharp-1",
+  "BasePath": "_content/kubernetes-demo-si-sharp-1",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
