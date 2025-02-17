@@ -3,6 +3,21 @@ kind: Namespace
 metadata:
   name: argo-demo
 ---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: si-sharp-1
+spec:
+  destination:
+    namespace: argo-demo
+    server: https://kubernetes.default.svc
+  source:
+    path: kubernetest
+    repoURL: https://github.com/ginwa123/kubernetes-demo-si-sharp-1.git
+    targetRevision: main
+  sources: []
+  project: default
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
